@@ -8,5 +8,7 @@
             "email": "david.meth@live.com"
         }
     ],
-    "require": {}
+    "require": {
+        "ext-json": "*"
+    }
 }
