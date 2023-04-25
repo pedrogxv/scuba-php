@@ -9,6 +9,7 @@
         }
     ],
     "require": {
-        "ext-json": "*"
+        "ext-json": "*",
+      "ext-dom": "*"
     }
 }

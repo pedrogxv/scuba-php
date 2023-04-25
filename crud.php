@@ -1,11 +1,12 @@
 <?php
 
-function crud_create($user) {
+function crud_create(array $user)
+{
     $users = json_decode(
         file_get_contents("./data/users.json")
     );
 
-    $users += $user;
+    $users[] = $user;
 
     // persisting
     file_put_contents("./data/users.json", json_encode($users));
