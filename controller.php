@@ -4,6 +4,7 @@ use App\View;
 
 include './view.php';
 include './crud.php';
+include './response.php';
 
 function show_register()
 {
@@ -15,16 +16,10 @@ function do_register()
     if ($_POST) {
         crud_create($_POST['person']);
 
-        ob_start();
-        session_start();
-        $_SESSION['flash_message'] = ['Usuário Cadastrado'];
-
-        header('Location: http://localhost:8080/?page=login');
-
-        ob_end_flush();
-        session_write_close();
-
-        exit;
+        redirect_with_successfull_message(
+            "http://localhost:8080/?page=login",
+            "Usuário Cadastrado"
+        );
     }
 }
 
