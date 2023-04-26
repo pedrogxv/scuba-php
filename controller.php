@@ -1,34 +1,50 @@
 <?php
 
+use App\Validator;
 use App\View;
 
 include './view.php';
+include './validator.php';
 include './crud.php';
 include './response.php';
 
-function show_register()
+function show_register(): void
 {
-    View::render_view('register');
+    (new View('register'))->render();
 }
 
-function do_register()
+function do_register(): void
 {
     if ($_POST) {
-        crud_create($_POST['person']);
+        try {
+            $validator = new Validator([
+                'email' => ['unique'],
+                'password' => ['min:10'],
+                'password-confirm' => ['min:10', 'equals:password'],
+            ], $_POST);
 
-        redirect_with_successfull_message(
-            "http://localhost:8080/?page=login",
-            "Usuário Cadastrado"
-        );
+            $validator->validate();
+
+            crud_create($_POST);
+
+            redirect_with_successfull_message(
+                "http://localhost:8080/?page=login",
+                "Usuário Cadastrado"
+            );
+        } catch (Exception $e) {
+            redirect_to(
+                "http://localhost:8080/?page=register",
+            );
+        }
     }
 }
 
-function do_login()
+function do_login(): void
 {
-    View::render_view('login');
+    (new View('login'))->render();
 }
 
-function do_not_found()
+function do_not_found(): void
 {
-    View::render_view('not_found');
+    (new View('not_found'))->render();
 }
