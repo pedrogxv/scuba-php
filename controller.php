@@ -13,7 +13,7 @@ function show_register(): void
     (new View('register'))->render();
 }
 
-function do_register(): void
+function register_post(): void
 {
     if ($_POST) {
         try {
@@ -25,13 +25,17 @@ function do_register(): void
 
             $validator->validate();
 
+            unset($_POST["password-confirm"]);
             crud_create($_POST);
 
-            redirect_with_successfull_message(
-                "http://localhost:8080/?page=login",
-                "Usuário Cadastrado"
+            put_flash_message("Cadastro Realizado! Lhe enviamos um e-mail para confirmação!");
+
+            redirect_to(
+                "http://localhost:8080/?page=login"
             );
         } catch (Exception $e) {
+            put_error_message($e->getMessage());
+
             redirect_to(
                 "http://localhost:8080/?page=register",
             );
@@ -44,6 +48,19 @@ function do_login(): void
     (new View('login'))->render();
 }
 
+function login_post(): void
+{
+    if ($_POST) {
+        if (authenticate($_POST["email"], $_POST["password"])) {
+            redirect_to("/?page=home");
+        }
+
+        put_error_message("Usuário ou/e senha incorretos");
+    }
+
+    redirect_to("/?page=login");
+}
+
 function do_not_found(): void
 {
     (new View('not_found'))->render();
@@ -51,20 +68,24 @@ function do_not_found(): void
 
 function do_validation(): void
 {
-    // @TODO : desacoplar validador de email
     if ($_GET && $_GET["token"]) {
         $users = json_decode(
             file_get_contents(DATA_LOCATION), true
         );
 
-        foreach ($users as &$item) {
-            if ($item['email'] === decrypt_ssl($_GET["token"], $item["email"])) {
-                $item['mail_validation'] = true;
+        foreach ($users as $item) {
+            if (gettype(decrypt_ssl($_GET["token"], $item["email"])) == 'string') {
+                crud_update($item['email'], ["mail_validation" => true]);
             }
         }
 
-        file_put_contents(DATA_LOCATION, json_encode($users));
+        put_flash_message("E-mail confirmado! Faça login para continuar!");
     }
 
-    (new View('mail_confirmed'))->render();
+    redirect_to("http://localhost:8080/?page=login");
+}
+
+function do_home(): void
+{
+    (new View('home'))->render();
 }

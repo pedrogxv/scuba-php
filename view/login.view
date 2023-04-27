@@ -14,11 +14,11 @@
         <div class="mensagem-sucesso">
         </div>
         <label for="login">Email</label>
-        <input type="text" name="person[email]" required>
-        <span class="mensagem-erro">Mensagem de Erro</span>
+        <input type="text" name="email" required>
+        <span class="mensagem-erro"></span>
         <label for="password">Senha</label>
-        <input type="password" name="person[password]" required>
-        <span class="mensagem-erro">Mensagem de Erro</span>
+        <input type="password" name="password" required>
+        <span class="mensagem-erro"></span>
         <button>Entrar</button>
         <a href="./?page=register">Cadastrar Usuário</a>
         <a href="./?page=forget-password">Esqueci Minha Senha</a>

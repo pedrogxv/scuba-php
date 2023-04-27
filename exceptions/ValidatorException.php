@@ -17,7 +17,7 @@ class ValidatorException extends Exception
         parent::__construct($message, $code, $previous);
 
         if (!empty($this->field)) {
-            session_start();
+            
             $_SESSION[ERROR_MESSAGES_SESSION_NAME][] = [
                 $this->field => $message
             ];

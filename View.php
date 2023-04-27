@@ -13,7 +13,7 @@ class View
         private readonly DOMDocument $document = new DOMDocument('1.0', 'UTF-8'),
     )
     {
-        session_start();
+        
     }
 
     public function render(): void
@@ -23,7 +23,8 @@ class View
         $this->document->loadHTML($content);
 
         self::render_success_message();
-        self::render_errors_messages();
+        self::render_form_error_messages();
+        self::render_error_messages();
 
         echo $this->document->saveHTML();
     }
@@ -49,7 +50,7 @@ class View
         unset($_SESSION[FLASH_MESSAGE_SESSION_NAME]);
     }
 
-    private function render_errors_messages(): void
+    private function render_form_error_messages(): void
     {
         if (!isset($_SESSION) || empty($_SESSION[ERROR_MESSAGES_SESSION_NAME])) return;
 
@@ -77,5 +78,18 @@ class View
                 }
             }
         }
+    }
+
+    private function render_error_messages(): void
+    {
+        if (!isset($_SESSION)) return;
+        if (!array_key_exists(ERROR_MESSAGES_SESSION_NAME, $_SESSION)) return;
+
+        $domX = new DOMXPath($this->document);
+        // getting element by class name
+        $success_div = $domX->query("//*[contains(concat(' ', normalize-space(@class), ' '), 'mensagem-erro')]");
+        $success_div->textContent = $_SESSION[ERROR_MESSAGES_SESSION_NAME];
+
+        unset($_SESSION[ERROR_MESSAGES_SESSION_NAME]);
     }
 }

@@ -12,6 +12,7 @@ function crud_create(array $user): void
     );
 
     $user['mail_validation'] = false;
+    $user["password"] = md5($user["password"]);
 
     $users[] = $user;
 
@@ -23,4 +24,21 @@ function crud_create(array $user): void
     ));
 
     $mail->send();
+}
+
+function crud_update(string $email, array $newData): void
+{
+    $users = json_decode(
+        file_get_contents(DATA_LOCATION), true
+    );
+
+    foreach ($users as &$item) {
+        if ($item['email'] === $email) {
+            foreach ($newData as $field => $value) {
+                if (isset($item[$field])) $item[$field] = $value;
+            }
+        }
+    }
+
+    file_put_contents(DATA_LOCATION, json_encode($users));
 }
