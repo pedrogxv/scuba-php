@@ -48,3 +48,23 @@ function do_not_found(): void
 {
     (new View('not_found'))->render();
 }
+
+function validate_mail(): void
+{
+    // @TODO : desacoplar validador de email
+    if ($_GET && $_GET["token"]) {
+        $users = json_decode(
+            file_get_contents(DATA_LOCATION), true
+        );
+
+        foreach ($users as &$item) {
+            if ($item['email'] === $_GET["token"]) {
+                $item['mail_validation'] = true;
+            }
+        }
+
+        file_put_contents(DATA_LOCATION, json_encode($users));
+    }
+
+    (new View('mail_confirmed'))->render();
+}

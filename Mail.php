@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Mails\MailView;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -12,7 +13,7 @@ class Mail
     public function __construct(
         private readonly string $to,
         private readonly string $subject,
-        private readonly string $htmlPath,
+        private readonly MailView $view,
     )
     {
     }
@@ -37,7 +38,7 @@ class Mail
         $this->PHPMailer->addAddress($this->to);
         $this->PHPMailer->isHTML();
         $this->PHPMailer->CharSet = 'UTF-8';
-        $this->PHPMailer->Body = file_get_contents($this->htmlPath);
+        $this->PHPMailer->Body = $this->view->render();
     }
 
     public function send(): void
