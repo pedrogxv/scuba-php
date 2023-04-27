@@ -23,7 +23,7 @@ class MailValidation implements MailView
             <h1>Validação de E-mail</h1>
             <p>Olá,</p>
             <p>Para confirmar seu endereço de e-mail, por favor clique no link abaixo:</p>
-            <a href="http://localhost:8080/?page=validate_mail&token=' . $this->token . '">Clique aqui para confirmar seu endereço de e-mail</a>
+            <a href="http://localhost:8080/?page=mail-validation&token=' . $this->token . '">Clique aqui para confirmar seu endereço de e-mail</a>
             <p>Se você não solicitou essa confirmação, por favor ignore este e-mail.</p>
             <p>Obrigado!</p>
             </body>

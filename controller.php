@@ -49,7 +49,7 @@ function do_not_found(): void
     (new View('not_found'))->render();
 }
 
-function validate_mail(): void
+function do_validation(): void
 {
     // @TODO : desacoplar validador de email
     if ($_GET && $_GET["token"]) {
