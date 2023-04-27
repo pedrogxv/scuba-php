@@ -3,6 +3,8 @@
 use App\Mail;
 use App\Mails\MailValidation;
 
+include 'crypt.php';
+
 function crud_create(array $user): void
 {
     $users = json_decode(
@@ -16,6 +18,9 @@ function crud_create(array $user): void
     // persisting
     file_put_contents(DATA_LOCATION, json_encode($users));
 
-    (new Mail($user['email'], "Validação de e-mail", new MailValidation($user["email"])))
-        ->send();
+    $mail = new Mail($user['email'], "Validação de e-mail", new MailValidation(
+        encrypt_ssl($user['email'], $user['email'])
+    ));
+
+    $mail->send();
 }

@@ -58,7 +58,7 @@ function validate_mail(): void
         );
 
         foreach ($users as &$item) {
-            if ($item['email'] === $_GET["token"]) {
+            if ($item['email'] === decrypt_ssl($_GET["token"], $item["email"])) {
                 $item['mail_validation'] = true;
             }
         }
