@@ -5,8 +5,6 @@ namespace App;
 use App\Exceptions\ValidatorException;
 use Exception;
 
-include './exceptions/ValidatorException.php';
-
 class Validator
 {
     private string $current_field;
