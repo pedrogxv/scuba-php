@@ -67,6 +67,8 @@ class View
 
         // getting element by class name
         $success_div = $this->xPath->query("//*[contains(concat(' ', normalize-space(@class), ' '), 'mensagem-sucesso')]");
+        if (!$success_div[0]) return;
+
         $success_div[0]->appendChild($fragment);
 
         // remove a flash_message
