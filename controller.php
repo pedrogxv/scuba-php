@@ -87,5 +87,12 @@ function do_validation(): void
 
 function do_home(): void
 {
-    (new View('home'))->render();
+    $user = auth_user();
+
+    (new View('home'))
+        ->withData([
+            "field_name" => $user["name"],
+            "field_email" => $user["email"],
+        ])
+        ->render();
 }
