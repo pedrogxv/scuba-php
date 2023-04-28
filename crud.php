@@ -42,3 +42,18 @@ function crud_update(string $email, array $newData): void
 
     file_put_contents(DATA_LOCATION, json_encode($users));
 }
+
+function crud_delete(string $email): void
+{
+    $users = json_decode(
+        file_get_contents(DATA_LOCATION), true
+    );
+
+    foreach ($users as $id => $item) {
+        if ($item['email'] === $email) {
+            array_splice($users, $id, 1);
+        }
+    }
+
+    file_put_contents(DATA_LOCATION, json_encode($users));
+}
