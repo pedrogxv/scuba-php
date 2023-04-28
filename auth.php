@@ -23,3 +23,12 @@ function auth_user(): null|array
 {
     return $_SESSION['logged_user'] ?? null;
 }
+
+function logout(): bool
+{
+    if (!auth_user()) return false;
+
+    unset($_SESSION['logged_user']);
+
+    return true;
+}

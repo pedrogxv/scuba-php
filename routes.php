@@ -17,6 +17,7 @@ function guest_routes(): void
 function auth_routes(): void
 {
     if ($_GET['page'] == 'home') do_home();
+    else if ($_GET['page'] == 'logout') do_logout();
     else
         do_not_found();
 }

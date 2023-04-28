@@ -96,3 +96,9 @@ function do_home(): void
         ])
         ->render();
 }
+
+function do_logout(): void
+{
+    logout();
+    redirect_to("/?page=login");
+}
