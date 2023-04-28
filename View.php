@@ -107,8 +107,13 @@ class View
         if (!array_key_exists(ERROR_MESSAGES_SESSION_NAME, $_SESSION)) return;
 
         // getting element by class name
-        $success_div = $this->xPath->query("//*[contains(concat(' ', normalize-space(@class), ' '), 'mensagem-erro')]");
-        $success_div->textContent = $_SESSION[ERROR_MESSAGES_SESSION_NAME];
+        $error_node = $this->xPath
+            ->query("//*[contains(concat(' ', normalize-space(@class), ' '), 'mensagem-erro')]")
+            ->item(0);
+
+        foreach ($_SESSION[ERROR_MESSAGES_SESSION_NAME] as $message) {
+            $error_node->textContent .= $message . "\n";
+        }
 
         unset($_SESSION[ERROR_MESSAGES_SESSION_NAME]);
     }
