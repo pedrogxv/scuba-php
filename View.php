@@ -39,13 +39,15 @@ class View
         return $this;
     }
 
-    public function render(): void
+    public function render(): never
     {
         self::render_success_message();
         self::render_form_error_messages();
         self::render_error_messages();
 
         echo $this->document->saveHTML();
+
+        die();
     }
 
     private function getTemplateFilePath(): bool|string

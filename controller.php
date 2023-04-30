@@ -8,7 +8,7 @@ include './validator.php';
 include './crud.php';
 include './response.php';
 
-function show_register(): void
+function show_register(): never
 {
     (new View('register'))->render();
 }
@@ -41,7 +41,7 @@ function register_post(): never
     }
 }
 
-function do_login(): void
+function do_login(): never
 {
     (new View('login'))->render();
 }
@@ -59,7 +59,7 @@ function login_post(): never
     redirect_to("/?page=login");
 }
 
-function do_not_found(): void
+function do_not_found(): never
 {
     (new View('not_found'))->render();
 }
@@ -83,7 +83,7 @@ function do_validation(): never
     redirect_to("http://localhost:8080/?page=login");
 }
 
-function do_home(): void
+function do_home(): never
 {
     $user = auth_user();
 
