@@ -5,6 +5,23 @@ use App\Mails\MailValidation;
 
 include 'crypt.php';
 
+function crud_restore(string $email): ?array
+{
+    $users = json_decode(
+        file_get_contents(DATA_LOCATION), true
+    );
+
+    $user = null;
+
+    foreach ($users as $item) {
+        if ($item['email'] === $email) {
+            $user = $item;
+        }
+    }
+
+    return $user;
+}
+
 function crud_create(array $user): void
 {
     $users = json_decode(

@@ -71,7 +71,7 @@ class Validator
     private function is_min(string $value, int $min): bool
     {
         if (strlen($value) < $min) {
-            throw new ValidatorException("\"$value\" não pôde ser validado com tamanho minimo de $min caracteres!");
+            throw new ValidatorException("Campo \"$this->current_field\" não pôde ser validado com tamanho minimo de $min caracteres!");
         }
 
         return true;
