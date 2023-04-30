@@ -24,17 +24,13 @@ class View
 
     public function withData(array $data): View
     {
+        $file = file_get_contents($this->getTemplateFilePath());
+
         foreach ($data as $name => $value) {
-            $nodes = $this->xPath->query('//text()[contains(., "{{' . $name . '}}")]');
-
-            if (!$nodes) continue;
-
-            foreach ($nodes as $node) {
-                $node->nodeValue = str_replace('{{' . $name . '}}', $value, $node->nodeValue);
-            }
+            $file = str_replace("{{".$name."}}", $value, $file);
         }
 
-        $this->document->saveHTML();
+        $this->document->loadHTML($file);
 
         return $this;
     }
