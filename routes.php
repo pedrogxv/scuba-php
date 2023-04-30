@@ -10,6 +10,8 @@ function guest_routes(): void
     else if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_GET['page'] == 'mail-validation') do_validation();
     else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_GET['page'] == 'register') register_post();
     else if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_GET['page'] == 'login') login_post();
+    else if ($_GET['page'] == 'forget-password') do_forget_password();
+    else if ($_GET['page'] == 'change-password') do_change_password();
     else
         do_not_found();
 }

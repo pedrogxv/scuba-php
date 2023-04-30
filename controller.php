@@ -1,5 +1,7 @@
 <?php
 
+use App\Mail;
+use App\Mails\ResetPasswordMail;
 use App\Validator;
 use App\View;
 
@@ -107,4 +109,73 @@ function do_delete_account(): never
     put_flash_message("Conta deletada!");
 
     do_logout();
+}
+
+function do_forget_password(): never
+{
+    if ($_SERVER["REQUEST_METHOD"] == "GET") (new View("forget_password"))
+        ->render();
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $user = crud_restore($_POST["email"]);
+
+        if (!$user) {
+            put_error_message("E-mail não encontrado!");
+            redirect_to("/?page=forget-password");
+        }
+
+        $resetPwdMail = new Mail(
+            $user["email"],
+            "Redefinição de Senha",
+            new ResetPasswordMail(get_reset_password_token($user["email"])),
+        );
+
+        $resetPwdMail->send();
+
+        put_flash_message("Enviamos um e-mail para redefinição de senha!");
+    }
+
+    redirect_to("/?page=login");
+}
+
+function do_change_password(): never
+{
+    $token_decrypt = base64_decode($_GET["token"]);
+    $token_date = explode(":", $token_decrypt)[0];
+    $token_email = explode(":", $token_decrypt)[1];
+    if ($token_date != date("d-m-Y", strtotime("now"))) {
+        put_error_message("Token expirado!");
+        redirect_to("/?page=login");
+    }
+
+    if ($_SERVER["REQUEST_METHOD"] == "GET") {
+        (new View("change_password"))
+            ->withData([
+                "token" => $_GET["token"]
+            ])
+            ->render();
+    }
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        try {
+            (new Validator([
+                "password" => ["min:10", "equals:password-confirm"]
+            ], $_POST))->validate();
+
+            $user = crud_restore($token_email);
+
+            if (!$user) {
+                put_error_message("Token inválido!");
+                redirect_to("/?page=login");
+            }
+
+            crud_update($user["email"], ["password" => md5($_POST["password"])]);
+            put_flash_message("Senha alterada! Faça login para continuar.");
+        } catch (Exception $e) {
+            put_error_message($e->getCode());
+            reload();
+        }
+    }
+
+    redirect_to("/?page=login");
 }
